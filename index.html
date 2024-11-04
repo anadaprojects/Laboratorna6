@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Work 6</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+
+        #fetchDataButton {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        #fetchDataButton:hover {
+            background-color: #45a049;
+        }
+
+        #output {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .user-card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            width: 250px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .user-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .user-card p {
+            margin: 5px 0;
+            color: #333;
+        }
+
+        .user-card strong {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <button id="fetchDataButton">Download Data</button>
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('fetchDataButton').addEventListener('click', () => {
+            fetch('https://randomuser.me/api/?results=5')
+                .then(response => response.json())
+                .then(data => {
+                    const users = data.results;
+                    const outputDiv = document.getElementById('output');
+                    outputDiv.innerHTML = ''; // очищуємо попередні дані
+
+                    users.forEach(user => {
+                        const userCard = document.createElement('div');
+                        userCard.classList.add('user-card');
+
+                        userCard.innerHTML = `
+                            <img src="${user.picture.medium}" alt="User Picture">
+                            <p><strong>Ім'я:</strong> ${user.name.first} ${user.name.last}</p>
+                            <p><strong>Телефон:</strong> ${user.cell}</p>
+                            <p><strong>Місто:</strong> ${user.location.city}</p>
+                            <p><strong>Країна:</strong> ${user.location.country}</p>
+                            <p><strong>Поштовий індекс:</strong> ${user.location.postcode}</p>
+                            <p><strong>Email:</strong> ${user.email}</p>
+                        `;
+
+                        outputDiv.appendChild(userCard);
+                    });
+                })
+                .catch(error => console.error('Помилка при завантаженні даних:', error));
+        });
+    </script>
+</body>
+</html>
